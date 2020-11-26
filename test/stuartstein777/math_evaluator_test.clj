@@ -1,6 +1,9 @@
 (ns stuartstein777.math-evaluator-test
   (:require [clojure.test :refer :all]
-            [stuartstein777.math-evaluator :refer :all]))
+            [stuartstein777.math-evaluator :refer :all]
+            [stuartstein777.tokenizer :refer :all]
+            [stuartstein777.rpn-evaluator :refer :all]
+            [stuartstein777.rpn-convertor :refer :all]))
 
 (deftest is-operator?-tests
   (is (true? (is-operator? \*)))
@@ -54,4 +57,42 @@
     (is (= [100.0 \- 100.0] (tokenize "100 - 100")))
     (is (= [100.0 \/ 100.0] (tokenize "100 / 100")))
     (is (= [100.0 \* 100.0] (tokenize "100 * 100")))
-    (is (= [100.0 \* 100.0 \- 50.0 \+ 30.0 \/ 2.0] (tokenize "100 * 100 -50 +30 /2")))))
+    (is (= [100.0 \* 100.0 \- 50.0 \+ 30.0 \/ 2.0] (tokenize "100 * 100 -50 +30 /2")))
+    (is (= [1.0 \+ \~ \( 2.0 \) \/ -4.0 \* 5.0 \* \( 7.0 \/ -2.5 \)] (tokenize "1 + -(2) / -4 * 5*(7 / -2.5)")))
+    (is (= [100.0 \- \~ \~ -100.0] (tokenize "100 ---- 100")))))
+
+(deftest precedence-tests
+  (is (= :higher (precedence \* \+)))
+  (is (= :higher (precedence \* \-)))
+  (is (= :same (precedence \* \*)))
+  (is (= :same (precedence \* \/)))
+  (is (= :lower (precedence \* \~)))
+
+  (is (= :higher (precedence \/ \+)))
+  (is (= :higher (precedence \/ \-)))
+  (is (= :same (precedence \/ \*)))
+  (is (= :same (precedence \/ \/)))
+  (is (= :lower (precedence \/ \~)))
+
+  (is (= :same (precedence \+ \+)))
+  (is (= :same (precedence \+ \-)))
+  (is (= :lower (precedence \+ \*)))
+  (is (= :lower (precedence \+ \/)))
+  (is (= :lower (precedence \+ \~)))
+
+  (is (= :same (precedence \- \+)))
+  (is (= :same (precedence \- \-)))
+  (is (= :lower (precedence \- \*)))
+  (is (= :lower (precedence \- \/)))
+  (is (= :lower (precedence \- \~)))
+
+  (is (= :higher (precedence \~ \+)))
+  (is (= :higher (precedence \~ \-)))
+  (is (= :higher (precedence \~ \*)))
+  (is (= :higher (precedence \~ \/)))
+  (is (= :same (precedence \~ \~))))
+
+(deftest pop-brackets-tests
+  (is (= {:output [1.0 2.0 \* \+] :op-stack [\/]}
+         (pop-brackets {:output [1.0 2.0] :op-stack [\* \+ \( \/]}))))
+
