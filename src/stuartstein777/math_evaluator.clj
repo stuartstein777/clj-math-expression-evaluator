@@ -5,11 +5,12 @@
             [stuartstein777.rpn-convertor :as rpnc]
             [stuartstein777.rpn-evaluator :as rpne]))
 
-
-(->> (tkr/tokenize "100+40*(2*3)---3")
-     (rpnc/to-rpn)
-     (rpne/evaluate-rpn))
-
+(defn evaluate [expr]
+  (->> (tkr/tokenize expr)
+       (rpnc/to-rpn)
+       (rpne/evaluate-rpn)
+       (first))
+  )
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]

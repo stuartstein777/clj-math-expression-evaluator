@@ -17,8 +17,7 @@
         (let [op1 (first operand-stack)
             op2 (second operand-stack)
             res ((get-function i) op2 op1)]
-          (concat [res] (drop 2 operand-stack))
-          )))
+          (concat [res] (drop 2 operand-stack)))))
 
 (defn evaluate-rpn [rpn]
   (reduce rpn-reducer [] rpn))

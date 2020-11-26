@@ -27,16 +27,10 @@
                   (recur (conj tokens (Double/parseDouble num)) (+ loc (count num))))
 
                 (= \- token)
-                (let [dash-type (dash-type expr loc)]
-                  (cond (= :subtraction dash-type)
-                        (recur (conj tokens \-) (inc loc))
-
-                        (and (= :negation dash-type) (Character/isDigit ^char (nth expr (inc loc))))
-                        (let [num (get-number expr (inc loc))]
-                          (recur (conj tokens (- (Double/parseDouble num))) (+ loc 1 (count num))))
-
-                        :else
-                        (recur (conj tokens \~) (inc loc))))
+                (cond (= :subtraction (dash-type expr loc))
+                      (recur (conj tokens \-) (inc loc))
+                      :else
+                      (recur (conj tokens \~) (inc loc)))
 
                 (is-operator? token)
                 (recur (conj tokens token) (inc loc))))))))
