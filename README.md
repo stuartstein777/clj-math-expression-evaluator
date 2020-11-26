@@ -1,50 +1,17 @@
 # math-evaluator
 
-FIXME: my new application.
+Solves simple math expressions.
 
-## Installation
+Supported Operators (+ * / - ), plus parenthesis and negative numbers.
 
-Download from https://github.com/stuartstein777/math-evaluator
+e.g.
 
-## Usage
+```clojure
 
-FIXME: explanation
+(solve "(123.45*(678.90 / (-2.5+ 11.5)-(((80 -(19))) *33.25)) / 20) - (123.45*(678.90 / (-2.5+ 11.5)-(((80 -(19))) *33.25)) / 20) + (13 - 2)/ -(-11)")
+=> 1.0
+```
 
-Run the project directly:
-
-    $ clojure -M -m stuartstein777.math-evaluator
-
-Run the project's tests (they'll fail until you edit them):
-
-    $ clojure -M:test:runner
-
-Build an uberjar:
-
-    $ clojure -M:uberjar
-
-Run that uberjar:
-
-    $ java -jar math-evaluator.jar
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2020 Stuart
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Works by parsing the input expression into tokens.
+Converts those tokens to Reverse Polish Notation (to handle precedence)
+Evaluates the RPN.
