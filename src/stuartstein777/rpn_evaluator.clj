@@ -20,4 +20,4 @@
           (concat [res] (drop 2 operand-stack)))))
 
 (defn evaluate-rpn [rpn]
-  (reduce rpn-reducer [] rpn))
+  (first (reduce rpn-reducer [] rpn)))

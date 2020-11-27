@@ -8,10 +8,9 @@
 (defn evaluate [expr]
   (->> (tkr/tokenize expr)
        (rpnc/to-rpn)
-       (rpne/evaluate-rpn)
-       (first))
-  )
+       (rpne/evaluate-rpn)))
+
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
-  (println "Hello, World!"))
+  (println "Evaluating" (first args))
+  (println (evaluate (first args))))

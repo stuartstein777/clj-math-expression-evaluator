@@ -102,6 +102,8 @@
     (is (= 3.0 (evaluate "1+2")))
     (is (= 6.0 (evaluate "2*3")))
     (is (= 14.0 (evaluate "2+3*4")))
+    (is (= 8.0 (evaluate "2+3*4/2")))
+    (is (= 8.0 (evaluate "2+(3*4)/2")))
 
 
 

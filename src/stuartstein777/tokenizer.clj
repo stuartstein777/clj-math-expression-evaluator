@@ -17,20 +17,16 @@
 
 (defn tokenize [expr]
   (let [expr (str/replace expr #" " "")]
-    (loop [tokens []
-           loc 0]
+    (loop [tokens [] loc 0]
       (if (= loc (count expr))
         tokens
         (let [token (nth expr loc)]
           (cond (Character/isDigit ^char token)
                 (let [num (get-number expr loc)]
                   (recur (conj tokens (Double/parseDouble num)) (+ loc (count num))))
-
-                (= \- token)
-                (cond (= :subtraction (dash-type expr loc))
-                      (recur (conj tokens \-) (inc loc))
-                      :else
-                      (recur (conj tokens \~) (inc loc)))
-
-                (is-operator? token)
-                (recur (conj tokens token) (inc loc))))))))
+                :else
+                (recur (conj tokens
+                             (if (= \- token)
+                               (if (= :subtraction (dash-type expr loc)) \- \~)
+                               token))
+                       (inc loc))))))))
